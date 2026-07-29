@@ -19,6 +19,8 @@ interface NotesState {
   deleteNote: (id: string) => void;
 
   setSelectedNote: (note: Note | null) => void;
+
+  togglePin: (id: string) => void;
 }
 
 export const useNotesStore = create<NotesState>()(
@@ -66,6 +68,19 @@ export const useNotesStore = create<NotesState>()(
         set({
           selectedNote: note,
         });
+      },
+
+      togglePin: (id) => {
+        set((state) => ({
+          notes: state.notes.map((note) =>
+            note.id === id
+              ? {
+                  ...note,
+                  pinned: !note.pinned,
+                }
+              : note
+          ),
+        }));
       },
     }),
 
