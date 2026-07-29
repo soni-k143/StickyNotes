@@ -7,6 +7,8 @@ interface NotesState {
   notes: Note[];
 
   addNote: (title: string, content: string) => void;
+
+  deleteNote: (id: string) => void;
 }
 
 export const useNotesStore = create<NotesState>()(
@@ -26,6 +28,12 @@ export const useNotesStore = create<NotesState>()(
 
         set((state) => ({
           notes: [...state.notes, newNote],
+        }));
+      },
+      
+      deleteNote: (id) => {
+        set((state) => ({
+          notes: state.notes.filter((note) => note.id !== id),
         }));
       },
     }),
