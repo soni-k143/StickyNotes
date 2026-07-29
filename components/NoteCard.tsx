@@ -9,15 +9,28 @@ interface NoteCardProps {
   note: Note;
 }
 
-export default function NoteCard({ note }: NoteCardProps) {
-  const deleteNote = useNotesStore((state) => state.deleteNote);
+export default function NoteCard({
+  note,
+}: NoteCardProps) {
+  const deleteNote = useNotesStore(
+    (state) => state.deleteNote
+  );
+
+  const setSelectedNote = useNotesStore(
+    (state) => state.setSelectedNote
+  );
 
   return (
-    <div className="relative rounded-xl bg-yellow-200 p-5 shadow-md transition hover:shadow-lg">
+    <div
+      onClick={() => setSelectedNote(note)}
+      className="relative cursor-pointer rounded-xl bg-yellow-200 p-5 shadow-md transition hover:shadow-lg"
+    >
       <button
-        onClick={() => deleteNote(note.id)}
-        className="absolute right-3 top-3 rounded-md p-1 text-red-600 transition hover:bg-red-100"
-        title="Delete note"
+        onClick={(e) => {
+          e.stopPropagation();
+          deleteNote(note.id);
+        }}
+        className="absolute right-3 top-3 rounded-md p-1 text-red-600 hover:bg-red-100"
       >
         <Trash2 size={18} />
       </button>

@@ -1,28 +1,44 @@
 "use client";
 
+import { useNotesStore } from "@/store/notesStore";
 import { useState } from "react";
 
 interface NoteFormProps {
   onClose: () => void;
-  onSave: (title: string, content: string) => void;
 }
 
 export default function NoteForm({
   onClose,
-  onSave,
 }: NoteFormProps) {
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
+  const {
+    selectedNote,
+    addNote,
+    updateNote,
+    setSelectedNote,
+  } = useNotesStore();
+  const [title, setTitle] = useState(
+    selectedNote?.title ?? ""
+  );
 
-  const handleCreate = () => {
-
+  const [content, setContent] = useState(
+    selectedNote?.content ?? ""
+  );
+  const isEditing = selectedNote !== null;
+  const handleSave = () => {
     if (!title.trim()) return;
 
-    onSave(title, content);
+    if (isEditing) {
+      updateNote(
+        selectedNote.id,
+        title,
+        content
+      );
+    } else {
+      addNote(title, content);
+    }
 
-    setTitle("");
-    setContent("");
+    setSelectedNote(null);
 
     onClose();
   };
@@ -33,7 +49,9 @@ export default function NoteForm({
       <div className="w-full max-w-md rounded-xl bg-white p-6 shadow-xl">
 
         <h2 className="mb-6 text-2xl font-bold">
-          New Sticky Note
+          {isEditing
+            ? "Edit Note"
+            : "New Sticky Note"}
         </h2>
 
         <input
@@ -61,10 +79,12 @@ export default function NoteForm({
           </button>
 
           <button
-            onClick={handleCreate}
+            onClick={handleSave}
             className="rounded-lg bg-yellow-500 px-4 py-2 text-white"
           >
-            Create Note
+            {isEditing
+              ? "Save Changes"
+              : "Create Note"}
           </button>
 
         </div>

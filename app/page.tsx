@@ -13,7 +13,13 @@ export default function Home() {
 
   // Read the action from Zustand
   const addNote = useNotesStore((state) => state.addNote);
+  const selectedNote = useNotesStore(
+    (state) => state.selectedNote
+  );
 
+  const setSelectedNote = useNotesStore(
+    (state) => state.setSelectedNote
+  );
   return (
     <main className="min-h-screen bg-gray-100">
       <Header />
@@ -23,12 +29,11 @@ export default function Home() {
       {/* Notice: NotesGrid no longer receives notes as props */}
       <NotesGrid />
 
-      {isFormOpen && (
+      {(isFormOpen || selectedNote) && (
         <NoteForm
-          onClose={() => setIsFormOpen(false)}
-          onSave={(title, content) => {
-            addNote(title, content);
+          onClose={() => {
             setIsFormOpen(false);
+            setSelectedNote(null);
           }}
         />
       )}
