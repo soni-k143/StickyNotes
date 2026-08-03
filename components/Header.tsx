@@ -8,7 +8,7 @@ export default function Header() {
           📝 Sticky Notes
         </h1>
 
-        <SearchBar />
+        {/* <SearchBar /> */}
       </div>
     </header>
   );
