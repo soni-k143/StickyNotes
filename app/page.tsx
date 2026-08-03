@@ -8,6 +8,7 @@ import NoteForm from "@/components/NoteForm";
 import NotesGrid from "@/components/NotesGrid";
 import { useNotesStore } from "@/store/notesStore";
 import SearchBar from "@/components/SearchBar";
+import { useDebounce } from "@/hooks/useDebounce";
 
 export default function Home() {
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -21,6 +22,9 @@ export default function Home() {
   const setSelectedNote = useNotesStore(
     (state) => state.setSelectedNote
   );
+
+  const debouncedSearch = useDebounce(search, 300);
+
   return (
     <main className="min-h-screen bg-gray-100">
       <Header />
@@ -33,7 +37,8 @@ export default function Home() {
         />
       </div>
       {/* Notice: NotesGrid no longer receives notes as props */}
-      <NotesGrid search={search} />
+
+      <NotesGrid search={debouncedSearch} />
 
       {(isFormOpen || selectedNote) && (
         <NoteForm
