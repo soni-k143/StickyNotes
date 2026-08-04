@@ -8,12 +8,18 @@ interface NotesState {
 
   selectedNote: Note | null;
 
-  addNote: (title: string, content: string) => void;
+  addNote:
+    (
+    title: string,
+    content: string,
+    color: string
+    ) => void;
 
   updateNote: (
     id: string,
     title: string,
-    content: string
+    content: string,
+    color: string
   ) => void;
 
   deleteNote: (id: string) => void;
@@ -28,15 +34,19 @@ export const useNotesStore = create<NotesState>()(
     (set) => ({
       notes: [],
 
-      addNote: (title, content) => {
-        const newNote: Note = {
+      addNote: (title, content, color) => {
+        console.log("STORE RECEIVED:", color);
+
+        const newNote = {
           id: crypto.randomUUID(),
           title,
           content,
-          color: "#FDE68A",
-          pinned: false,
           createdAt: Date.now(),
+          pinned: false,
+          color,
         };
+
+        console.log("NEW NOTE:", newNote);
 
         set((state) => ({
           notes: [...state.notes, newNote],
@@ -51,7 +61,12 @@ export const useNotesStore = create<NotesState>()(
 
       selectedNote: null,
 
-      updateNote: (id, title, content) => {
+      updateNote: (
+        id,
+        title,
+        content,
+        color
+      ) => {
         set((state) => ({
           notes: state.notes.map((note) =>
             note.id === id
@@ -59,6 +74,7 @@ export const useNotesStore = create<NotesState>()(
                   ...note,
                   title,
                   content,
+                  color,
                 }
               : note
           ),

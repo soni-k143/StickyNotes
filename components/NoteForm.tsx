@@ -1,7 +1,8 @@
 "use client";
 
 import { useNotesStore } from "@/store/notesStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import ColorPicker from "./ColorPicker";
 
 interface NoteFormProps {
   onClose: () => void;
@@ -24,25 +25,35 @@ export default function NoteForm({
   const [content, setContent] = useState(
     selectedNote?.content ?? ""
   );
+  const [color, setColor] = useState(selectedNote?.color ?? "yellow");
   const isEditing = selectedNote !== null;
+
+  useEffect(() => {
+    console.log("Selected Color:", color);
+  }, [color]);
   const handleSave = () => {
     if (!title.trim()) return;
+
+    console.log({
+      title,
+      content,
+      color,
+    });
 
     if (isEditing) {
       updateNote(
         selectedNote.id,
         title,
-        content
+        content,
+        color
       );
     } else {
-      addNote(title, content);
+      addNote(title, content, color);
     }
 
     setSelectedNote(null);
-
     onClose();
   };
-
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/40">
 
@@ -67,6 +78,11 @@ export default function NoteForm({
           onChange={(e) => setContent(e.target.value)}
           placeholder="Write your note..."
           className="mb-6 w-full rounded-lg border p-3"
+        />
+
+        <ColorPicker
+          value={color}
+          onChange={setColor}
         />
 
         <div className="flex justify-end gap-3">

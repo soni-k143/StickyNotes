@@ -13,6 +13,13 @@ interface NoteCardProps {
 export default function NoteCard({
   note,
 }: NoteCardProps) {
+  const NOTE_COLORS = {
+    yellow: "#FEF08A",
+    green: "#BBF7D0",
+    blue: "#BFDBFE",
+    pink: "#FBCFE8",
+    purple: "#DDD6FE",
+  };
   const deleteNote = useNotesStore(
     (state) => state.deleteNote
   );
@@ -25,9 +32,13 @@ export default function NoteCard({
     (state) => state.togglePin
   );
   return (
+    
     <div
       onClick={() => setSelectedNote(note)}
       className="relative cursor-pointer rounded-xl bg-yellow-200 p-5 shadow-md transition hover:shadow-lg"
+      style={{
+        backgroundColor: NOTE_COLORS[note.color as keyof typeof NOTE_COLORS],
+      }}
     >
       <button
         onClick={(e) => {

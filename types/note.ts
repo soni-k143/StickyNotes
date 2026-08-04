@@ -2,7 +2,7 @@ export interface Note {
   id: string;
   title: string;
   content: string;
-  color: string;
-  pinned: boolean;
   createdAt: number;
+  pinned: boolean;
+  color: string;
 }
